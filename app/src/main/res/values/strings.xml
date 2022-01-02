@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Events</string>
+    <string name="title_activity_home">Events</string>
+    <string name="tab_text_1">Joined</string>
+    <string name="tab_text_2">Organised</string>
+    <string name="tab_text_3">Invitations</string>
+    <string name="tab_text_4">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

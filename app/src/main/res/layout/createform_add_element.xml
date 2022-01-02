@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/white"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Element"
+        android:textSize="20dp"
+        android:layout_marginBottom="15dp"
+        android:textColor="#151515"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Add text to Form"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ddd"
+                    android:layout_marginRight="5dp"
+                    />
+                <Button
+                    android:id="@+id/subTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Sub Title"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ddd"
+                    android:layout_marginHorizontal="5dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Text"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ddd"
+                    android:layout_marginRight="5dp"
+                    />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Link"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ddd"
+                    android:layout_marginLeft="5dp"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Add Input Fields to Form"
+                android:layout_marginTop="10dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/textinput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Text Input"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ddd"
+                    android:layout_marginRight="5dp"
+                    />
+                <Button
+                    android:id="@+id/textarea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Text Area"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ddd"
+                    android:layout_marginLeft="5dp"
+                    />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number Input"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:backgroundTint="#ddd"
+                android:layout_marginRight="5dp"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:backgroundTint="#ddd"
+                android:layout_marginLeft="5dp"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Add Button to Form"
+            android:layout_marginTop="10dp"
+            />
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Radio Buttons"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:backgroundTint="#ddd"
+                android:layout_marginRight="5dp"
+                />
+            <Button
+                android:id="@+id/checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check Box"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:backgroundTint="#ddd"
+                android:layout_marginLeft="5dp"
+                />
+        </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
