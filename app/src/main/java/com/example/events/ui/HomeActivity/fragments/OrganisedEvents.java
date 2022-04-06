@@ -7,25 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.events.Components.C;
+import com.example.events.Components.FirebaseVolleyRequest;
 import com.example.events.CreateEvent;
 import com.example.events.R;
 import com.example.events.ViewEvents.ViewOrganisedEvent;
 import com.example.events.databinding.FragmentOrganisedEventsBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class OrganisedEvents extends Fragment {
 
@@ -33,16 +32,22 @@ public class OrganisedEvents extends Fragment {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
+    OrganisedEventListAdapter adapter;
+    JSONArray evenstList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentOrganisedEventsBinding.inflate(inflater,container,false);
-        binding.createevent.setOnClickListener(v->{
+        binding = FragmentOrganisedEventsBinding.inflate(inflater, container, false);
+        binding.createevent.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), CreateEvent.class));
         });
 
+        evenstList = new JSONArray();
+        binding.listview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        showList();
         return binding.getRoot();
     }
 
@@ -58,28 +63,101 @@ public class OrganisedEvents extends Fragment {
     public void onResume() {
         super.onResume();
         showList();
+
     }
 
-    private void showList(){
-        db.collection(C.users).document(C.getNumber(getActivity())).collection(C.organised_events).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> list = task.getResult().getDocuments();
-                for(DocumentSnapshot event: list){
-                    ConstraintLayout item = (ConstraintLayout) getLayoutInflater().inflate(R.layout.list_organised_event,null);
-                    binding.listview.removeAllViews();
-                    DocumentReference ref = (DocumentReference) event.get(C.reference);
-                    ref.get().addOnCompleteListener(t -> {
-                        String event_name = t.getResult().get(C.event_name).toString();
-                        String date = t.getResult().get(C.event_date).toString();
+    private void showList() {
 
-                        ((TextView) item.findViewById(R.id.eventname)).setText(event_name);
-                        ((TextView) item.findViewById(R.id.date)).setText(date);
-                        binding.listview.addView(item);
-                    });
-                    item.setOnClickListener(v-> startActivity(new Intent(getActivity(), ViewOrganisedEvent.class).putExtra(C.reference,ref.getPath())));
+        FirebaseVolleyRequest request = new FirebaseVolleyRequest(getActivity(), "events/organised");
+        request.makeGetRequest(new FirebaseVolleyRequest.GetResult() {
+            @Override
+            public void onResult(String result) {
+                try {
+                    evenstList = new JSONArray(result);
+                    adapter = new OrganisedEventListAdapter(evenstList);
+                    binding.listview.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onError(String error) {
+            }
         });
+
+    }
+
+    class OrganisedEventListAdapter extends RecyclerView.Adapter<OrganisedEventListAdapter.ViewHolder> {
+
+        JSONArray list;
+
+        public OrganisedEventListAdapter(JSONArray list) {
+            this.list = list;
+        }
+
+        @NonNull
+        @Override
+        public OrganisedEventListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.list_joined_event, null);
+            return new OrganisedEventListAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull OrganisedEventListAdapter.ViewHolder holder, int position) {
+            try {
+                JSONObject obj = evenstList.getJSONObject(position);
+                JSONObject eventData = obj.getJSONObject("eventData");
+                JSONObject data = obj.getJSONObject("data");
+
+                String eventName = eventData.getString("event_name");
+                String eventDate = eventData.getString("event_date");
+                String eventTime = eventData.getString("event_time");
+                String eventId = eventData.getString("event_id");
+
+                holder.eventName.setText(eventName);
+                holder.eventDate.setText(eventDate);
+                holder.eventTime.setText(eventTime + ", ");
+
+
+                holder.itemView.setOnClickListener(v ->
+                {
+                    try {
+                        Intent intent = new Intent(getActivity(), ViewOrganisedEvent.class);
+                        intent.putExtra(C.reference, data.getString("refString"));
+                        intent.putExtra("event_id", eventId);
+                        startActivity(intent);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.length();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView eventName;
+            TextView eventDate;
+            TextView eventTime;
+            View itemView;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                this.itemView = itemView;
+                eventName = itemView.findViewById(R.id.eventname);
+                eventDate = itemView.findViewById(R.id.date);
+                eventTime = itemView.findViewById(R.id.time);
+            }
+        }
     }
 }

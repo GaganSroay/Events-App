@@ -7,204 +7,163 @@ import static com.example.events.Form.Type.TEXTAREA;
 import static com.example.events.Form.Type.TEXTFIELD;
 import static com.example.events.Form.Type.TITLE;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.events.Components.C;
+import com.example.events.CreateEvent;
 import com.example.events.R;
 import com.example.events.databinding.ActivityCreateFormBinding;
 import com.example.events.databinding.CreateformAddElementBinding;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
-public class CreateForm extends AppCompatActivity {
+public class CreateForm extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityCreateFormBinding binding;
     private FormData formdata;
+    FormView formView;
+    CreateformAddElementBinding cb;
+    AlertDialog.Builder builder;
+    AlertDialog alert;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCreateFormBinding.inflate(getLayoutInflater());
+        formView = binding.createFormview;
         setContentView(binding.getRoot());
         formdata = new FormData();
+
+        binding.createbutton.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateForm.this, CreateEvent.class);
+            intent.putExtra("formdata", formView.getFormData());
+            intent.putExtra("hasForm", true);
+            intent.putExtra(C.event_name, getIntent().getStringExtra(C.event_name));
+            intent.putExtra(C.description, getIntent().getStringExtra(C.description));
+            intent.putExtra(C.event_date, getIntent().getStringExtra(C.event_date));
+            intent.putExtra(C.event_time, getIntent().getStringExtra(C.event_time));
+            startActivity(intent);
+            finish();
+        });
+
     }
 
-    public void addElementButton(View view){
-        formdata.printString();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    public void addElementButton(View view) {
 
-        LinearLayout container = (LinearLayout) getLayoutInflater().inflate(R.layout.createform_add_element,null);
-        CreateformAddElementBinding cb = CreateformAddElementBinding.bind(container);
-
+        LinearLayout container = (LinearLayout) getLayoutInflater().inflate(R.layout.createform_add_element, null);
+        cb = CreateformAddElementBinding.bind(container);
+        builder = new AlertDialog.Builder(this);
         builder.setView(container);
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-        AlertDialog alert = builder.show();
+        alert = builder.show();
+        cb.title.setOnClickListener(this);
+        cb.subTitle.setOnClickListener(this);
+        cb.text.setOnClickListener(this);
+        cb.textinput.setOnClickListener(this);
+        cb.textarea.setOnClickListener(this);
+        cb.checkbox.setOnClickListener(this);
 
-        cb.title.setOnClickListener(v->{
-            addTextElement(TITLE);
-            alert.dismiss();
-        });
-        cb.subTitle.setOnClickListener(v->{
-            addTextElement(SUBTITLE);
-            alert.dismiss();
-        });
-        cb.text.setOnClickListener(v->{
-            addTextElement(TEXT);
-            alert.dismiss();
-        });
-        cb.textinput.setOnClickListener(v->{
-            addInputElement(TEXTFIELD);
-            alert.dismiss();
-        });
-        cb.textarea.setOnClickListener(v->{
-            addInputElement(TEXTAREA);
-            alert.dismiss();
-        });
-        cb.checkbox.setOnClickListener(v->{
-            addInputElement(CHECKBOX);
-            alert.dismiss();
-        });
     }
 
-    private void addInputElement(Type type){
-        final EditText input = new EditText(this);
-        input.setHint("Enter Here");
-        input.setLayoutParams(newLayoutParams(20,0,20,0));
-
-        LinearLayout container = new LinearLayout(this);
-        container.setLayoutParams(newLayoutParams());
-        container.addView(input);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Enter name of field");
-        builder.setView(container);
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            String title = input.getText().toString();
-            switch (type){
-                case TEXTAREA: addViewtoList(getTextInputArea(input.getText().toString()),title, type);break;
-                case CHECKBOX: addViewtoList(getCheckbox(input.getText().toString()),title, type);break;
-                default: addViewtoList(getTextInputField(input.getText().toString()),title, type);
-            }
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
-    }
-
-    private void addViewtoList(View view,String title,Type type){
-        binding.formview.addView(view);
-        formdata.addElement(title, type);
-    }
-
-
-    private void addTextElement(Type type){
-        final EditText input = new EditText(this);
-        input.setHint("Enter Here");
-        input.setLayoutParams(newLayoutParams(20,0,20,0));
-        String title;
-        switch (type){
-            case SUBTITLE: title = "Enter Sub Title here";break;
-            case TITLE: title = "Enter Title here";break;
-            default : title = "Enter Text here";
-        }
-        LinearLayout container = new LinearLayout(this);
-        container.setLayoutParams(newLayoutParams());
-        container.addView(input);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(title);
-        builder.setView(container);
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            addViewtoList(getTextView(input.getText().toString(),type),input.getText().toString(), type);
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
-    }
-
-    private CheckBox getCheckbox(String text){
-        CheckBox cb = new CheckBox(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(dipToPixel(10),0,0,0);
-        cb.setText(text);
-        return cb;
-    }
-
-    private LinearLayout getTextInputField(String lable){
-        LinearLayout tin = (LinearLayout) getLayoutInflater().inflate(R.layout.text_input_field,null);
-        ((TextInputLayout) tin.findViewById(R.id.holder)).setHint(lable);
-        return tin;
-    }
-
-    private LinearLayout getTextInputArea(String lable){
-        LinearLayout tin = getTextInputField(lable);
-        TextInputEditText ted = ((TextInputEditText) tin.findViewById(R.id.field));
-        ted.setMinLines(6);
-        ted.setGravity(Gravity.TOP|Gravity.START);
-        return tin;
-    }
-
-    private TextView getTextView(String text){
-        TextView tv = new TextView(this);
-        tv.setText(text);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
-        tv.setLayoutParams(newLayoutParams());
-        return tv;
-    }
-
-    private TextView getTextView(String text,Type type){
-        TextView tv = getTextView(text);
-        if(type == TEXT) tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
-        else if(type == SUBTITLE) {
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
-            tv.setTextColor(Color.rgb(30,30,30));
-            tv.setTypeface(null, Typeface.BOLD);
-        }
-        else if(type == TITLE) {
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,30);
-            tv.setTypeface(null, Typeface.BOLD);
-            tv.setTextColor(Color.rgb(10,10,10));
-        }
-        return tv;
-    }
-
-    private int dipToPixel(int pixel){
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                pixel,
-                getResources().getDisplayMetrics()
+    void recieveMetadata(Type type) {
+        new GetFormMetadata(
+                this,
+                (d, t) -> formView.addElement(d, t),
+                type
         );
+        alert.dismiss();
     }
 
-    private LinearLayout.LayoutParams newLayoutParams(){ return new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT); }
-    private LinearLayout.LayoutParams newLayoutParams(int top,int bottom){ return newLayoutParams(0,0,top,0,bottom); }
-    private LinearLayout.LayoutParams newLayoutParams(int left,int top,int right,int bottom){ return newLayoutParams(0,left,top,right,bottom); }
-    private LinearLayout.LayoutParams newLayoutParams(int type){ return newLayoutParams(type,0,0,0,0); }
-    private LinearLayout.LayoutParams newLayoutParams(int type,int left,int top,int right,int bottom){
-        LinearLayout.LayoutParams params;
-        switch(type){
-            case 1: params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            case 2: params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            default: params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-        params.setMargins(
-                dipToPixel(left),
-                dipToPixel(top),
-                dipToPixel(right),
-                dipToPixel(bottom));
-        return params;
+    @Override
+    public void onClick(View v) {
+        if (cb.title.equals(v)) recieveMetadata(TITLE);
+        else if (cb.subTitle.equals(v)) recieveMetadata(SUBTITLE);
+        else if (cb.text.equals(v)) recieveMetadata(TEXT);
+        else if (cb.textinput.equals(v)) recieveMetadata(TEXTFIELD);
+        else if (cb.textarea.equals(v)) recieveMetadata(TEXTAREA);
+        else if (cb.checkbox.equals(v)) recieveMetadata(CHECKBOX);
     }
+
+    static class GetFormMetadata {
+        Activity activity;
+
+        public GetFormMetadata(Activity activity, OnResult onResult, Type type) {
+            this.activity = activity;
+
+            final EditText input = new EditText(activity);
+            input.setHint("Enter Here");
+            input.setLayoutParams(newLayoutParams(20, 0, 20, 0));
+            LinearLayout container1 = new LinearLayout(activity);
+            container1.setLayoutParams(newLayoutParams());
+            container1.addView(input);
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(activity);
+            builder1.setMessage("Enter name of field");
+            builder1.setView(container1);
+            builder1.setPositiveButton("OK", (dialog, which) -> {
+                String title = input.getText().toString();
+                onResult.onData(title, type);
+            });
+            builder1.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder1.show();
+        }
+
+        private int dipToPixel(int pixel) {
+            return (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    pixel,
+                    activity.getResources().getDisplayMetrics()
+            );
+        }
+
+        private LinearLayout.LayoutParams newLayoutParams() {
+            return new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        private LinearLayout.LayoutParams newLayoutParams(int top, int bottom) {
+            return newLayoutParams(0, 0, top, 0, bottom);
+        }
+
+        private LinearLayout.LayoutParams newLayoutParams(int left, int top, int right, int bottom) {
+            return newLayoutParams(0, left, top, right, bottom);
+        }
+
+        private LinearLayout.LayoutParams newLayoutParams(int type) {
+            return newLayoutParams(type, 0, 0, 0, 0);
+        }
+
+        private LinearLayout.LayoutParams newLayoutParams(int type, int left, int top, int right, int bottom) {
+            LinearLayout.LayoutParams params;
+            switch (type) {
+                case 1:
+                    params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                case 2:
+                    params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                default:
+                    params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+            params.setMargins(
+                    dipToPixel(left),
+                    dipToPixel(top),
+                    dipToPixel(right),
+                    dipToPixel(bottom));
+            return params;
+        }
+
+        interface OnResult {
+            void onData(String data, Type type);
+        }
+
+    }
+
 
 }

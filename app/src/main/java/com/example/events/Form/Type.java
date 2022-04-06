@@ -1,6 +1,8 @@
 package com.example.events.Form;
 
-public enum Type {
+import java.io.Serializable;
+
+public enum Type implements Serializable {
     TEXTFIELD,
     TEXTAREA,
     TITLE,

@@ -15,6 +15,7 @@ public class C {
     public static final String events = "events";
     public static final String event_name = "event_name";
     public static final String event_date = "event_date";
+    public static final String event_time = "event_time";
     public static final String description = "description";
 
     public static final String organised_events = "organised_events";
@@ -22,7 +23,7 @@ public class C {
     public static final String joined_events = "joined_events";
 
 
-    public static final String reference = "reference";
+    public static final String reference = "ref";
     public static final String prev_reference = "prev_reference";
 
 

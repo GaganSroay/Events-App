@@ -1,7 +1,5 @@
 package com.example.events.authentication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -9,10 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.events.Components.C;
+import com.example.events.Components.FirebaseVolleyRequest;
+import com.example.events.Components.LoadingBox;
 import com.example.events.HomeActivity;
 import com.example.events.databinding.ActivitySignupDetailsBinding;
-import com.example.events.Components.C;
-import com.example.events.Components.LoadingBox;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -44,23 +45,38 @@ public class SignupDetails extends AppCompatActivity implements DatePickerDialog
             String birth = binding.dateofbirth.getText().toString();
             String phone = getIntent().getStringExtra("phone");
 
-            Map<String, Object> userDetails = new HashMap<>();
+            Map<String, String> userDetails = new HashMap<>();
             userDetails.put(C.name, name);
             userDetails.put(C.email, email);
             userDetails.put(C.birth, birth);
             userDetails.put(C.phone,phone);
 
-            if(auth.getCurrentUser() != null){
+            if(auth.getCurrentUser() != null) {
                 loadingBar.show();
+
+                new FirebaseVolleyRequest(SignupDetails.this, FirebaseVolleyRequest.Routes.NEW_USER)
+                        .makeRequest(userDetails, new FirebaseVolleyRequest.GetResult() {
+                            @Override
+                            public void onResult(String result) {
+                                loadingBar.dismiss();
+                                startActivity(new Intent(SignupDetails.this, HomeActivity.class));
+                                finish();
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                loadingBar.dismiss();
+                                System.out.println("Exception");
+                                System.out.println(error);
+                            }
+                        });
+
+                /*
                 db.collection(C.users).document(phone).set(userDetails).addOnSuccessListener(aVoid ->{
-                    loadingBar.dismiss();
-                    startActivity(new Intent(SignupDetails.this, HomeActivity.class));
-                    finish();
+
                 }).addOnFailureListener(e -> {
-                    loadingBar.dismiss();
-                    System.out.println("Exception");
-                    System.out.println(e.getMessage());
-                });
+
+                });*/
             }
         });
 

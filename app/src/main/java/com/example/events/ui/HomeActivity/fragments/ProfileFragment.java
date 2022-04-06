@@ -1,15 +1,14 @@
 package com.example.events.ui.HomeActivity.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.events.databinding.FragmentProfileBinding;
+import androidx.fragment.app.Fragment;
+
 import com.example.events.Components.C;
+import com.example.events.databinding.FragmentProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,8 +25,9 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        db.collection(C.users).document(C.getNumber(getActivity())).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+
+        db.collection(C.users).document(auth.getUid()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 binding.name.setText(document.get(C.name).toString());
                 binding.email.setText(document.get(C.email).toString());

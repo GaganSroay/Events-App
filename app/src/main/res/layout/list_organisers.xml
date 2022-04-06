@@ -6,8 +6,8 @@
     android:orientation="vertical"
     android:padding="10dp">
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/circular_shape"
         android:backgroundTint="@color/cyan_1" />
 
@@ -15,6 +15,7 @@
         android:id="@+id/organiser_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="Name of person" />
 
 </LinearLayout>
