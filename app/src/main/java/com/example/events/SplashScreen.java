@@ -10,7 +10,6 @@ import com.example.events.Components.SharedPrefs;
 import com.example.events.authentication.Login;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SplashScreen extends AppCompatActivity {
@@ -24,31 +23,25 @@ public class SplashScreen extends AppCompatActivity {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
-            startActivity(new Intent(this, Login.class));
-            finish();
+            loginActivity();
         }
         new Server(this).verifyIdTokken(new Server.Result() {
             @Override
             public void onResult(JSONObject result) {
                 try {
                     if (result.has("error")) {
-                        JSONObject errorJson = result.getJSONObject("error");
-                        if (errorJson.getString("code").equals(TOKEN_EXPIRE_CODE)) {
-                            auth.getCurrentUser()
-                                    .getIdToken(false)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            String idToken = task.getResult().getToken();
-                                            SharedPrefs.setIdToken(getApplicationContext(), idToken);
-                                            homeActivity();
-                                        } else {
-                                            System.out.println(task.getException().getMessage());
-                                        }
-                                    });
-                        }
+                        auth.getCurrentUser()
+                                .getIdToken(false)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        String idToken = task.getResult().getToken();
+                                        SharedPrefs.setIdToken(getApplicationContext(), idToken);
+                                        homeActivity();
+                                    } else
+                                        System.out.println(task.getException().getMessage());
+                                });
                     } else if (result.has("user_id")) homeActivity();
-
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -57,6 +50,7 @@ public class SplashScreen extends AppCompatActivity {
             public void onError(String error) {
             }
         });
+    }
 
         /*else auth.getCurrentUser()
                     .getIdToken(false)
@@ -73,10 +67,14 @@ public class SplashScreen extends AppCompatActivity {
                         System.out.println("##############    "+e.getMessage()
                     ));*/
 
-    }
 
     private void homeActivity() {
         startActivity(new Intent(this, HomeActivity.class));
+        finish();
+    }
+
+    private void loginActivity() {
+        startActivity(new Intent(this, Login.class));
         finish();
     }
 }

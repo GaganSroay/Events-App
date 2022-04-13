@@ -116,6 +116,20 @@ public class EditEvent extends AppCompatActivity implements DatePickerDialog.OnD
                 datePickerDialog.show();
         });
 
+        binding.starteventbutton.setOnClickListener(v -> {
+            server.startEvent(eventId, new Server.Result() {
+                @Override
+                public void onResult(JSONObject result) {
+                    System.out.println(result.toString());
+                }
+
+                @Override
+                public void onError(String error) {
+                    System.err.println(error);
+                }
+            });
+        });
+
 
     }
 
@@ -144,7 +158,7 @@ public class EditEvent extends AppCompatActivity implements DatePickerDialog.OnD
 
             @Override
             public void onError(String error) {
-                System.out.println(error);
+                System.out.println("Error is " + error);
             }
         });
 

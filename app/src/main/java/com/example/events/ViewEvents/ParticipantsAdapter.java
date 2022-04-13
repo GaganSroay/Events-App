@@ -3,6 +3,7 @@ package com.example.events.ViewEvents;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,18 +39,21 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
     public void onBindViewHolder(ParticipantsAdapter.ViewHolder viewHolder, final int position) {
         if (viewHolder.getItemViewType() == 1) {
             Participants p = pList.get(position);
-            db.collection(C.users)
-                    .document(p.name).get().addOnCompleteListener(task -> {
+            db.collection(C.users).document(p.name).get().addOnCompleteListener(task -> {
                 DocumentSnapshot snapshot = task.getResult();
                 viewHolder.name.setText(snapshot.getString("name"));
             });
-            viewHolder.role.setText(p.role);
+            if (p.verified)
+                viewHolder.verified.setVisibility(View.VISIBLE);
+            else
+                viewHolder.verified.setVisibility(View.INVISIBLE);
 
-            viewHolder.view.setOnClickListener(v -> {
+            System.out.println("Updating with verfied " + p.verified);
+            /*viewHolder.view.setOnClickListener(v -> {
                 if (p.role.equals("p")) {
 
                 }
-            });
+            });*/
         } else if (viewHolder.getItemViewType() == 0) {
             if (position > 0) {
                 ((TextView) viewHolder.view).setText("Participant");
@@ -70,13 +74,13 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
-        TextView role;
+        ImageView verified;
         View view;
 
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
-            role = view.findViewById(R.id.role);
+            verified = view.findViewById(R.id.verified);
             this.view = view;
         }
     }

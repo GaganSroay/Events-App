@@ -26,13 +26,14 @@
         app:layout_constraintLeft_toRightOf="@id/image"
         app:layout_constraintTop_toTopOf="@id/image" />
 
-    <TextView
-        android:id="@+id/role"
+    <ImageView
+        android:id="@+id/verified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="Role"
+        android:src="@drawable/icon_check"
         android:visibility="invisible"
+        app:tint="@color/cyan_2"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toRightOf="@id/name"

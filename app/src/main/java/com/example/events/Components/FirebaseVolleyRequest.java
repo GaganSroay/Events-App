@@ -77,7 +77,7 @@ public class FirebaseVolleyRequest {
                 callback::onResult,
                 error -> {
                     callback.onError("error");
-                    System.out.println(error);
+                    System.out.println(error.getMessage());
                 }
         ) {
             @Override
@@ -100,8 +100,8 @@ public class FirebaseVolleyRequest {
                 link,
                 callback::onResult,
                 error -> {
-                    callback.onError("error");
-                    System.out.println(error);
+                    callback.onError(error.getMessage());
+                    System.out.println(error.getMessage());
                 }
         ) {
             @Override
@@ -124,8 +124,8 @@ public class FirebaseVolleyRequest {
                 link,
                 callback::onResult,
                 error -> {
-                    callback.onError("error");
-                    System.out.println(error);
+                    callback.onError(error.getMessage());
+                    System.out.println(error.getMessage());
                 }
         ) {
             @Override
@@ -143,7 +143,7 @@ public class FirebaseVolleyRequest {
                 link,
                 callback::onResult,
                 error -> {
-                    callback.onError("error");
+                    callback.onError(error.getMessage());
                     System.out.println(error.getMessage());
                 }
         ) {
@@ -192,7 +192,6 @@ public class FirebaseVolleyRequest {
 
     public interface GetResult {
         void onResult(String result);
-
         void onError(String error);
     }
 

@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Events"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ViewEvents.Organise.TicketScannerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewEvents.Organise.EditEvent"
             android:exported="false" />
         <activity

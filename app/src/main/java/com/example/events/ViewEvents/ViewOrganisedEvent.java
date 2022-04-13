@@ -1,5 +1,6 @@
 package com.example.events.ViewEvents;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,6 +14,7 @@ import com.example.events.Components.FirebaseVolleyRequest;
 import com.example.events.ViewEvents.Organise.OrganiseEventAboutPage;
 import com.example.events.ViewEvents.Organise.OrganiseEventMessage;
 import com.example.events.ViewEvents.Organise.OrganiseEventParticipant;
+import com.example.events.ViewEvents.Organise.TicketScannerActivity;
 import com.example.events.databinding.ActivityViewOrganisedEventBinding;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,6 +51,11 @@ public class ViewOrganisedEvent extends AppCompatActivity {
 
         updateUI();
 
+        binding.scannerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TicketScannerActivity.class);
+            intent.putExtra("event_id", eventId);
+            startActivity(intent);
+        });
         /*binding.inviteparticipantbutton.setOnClickListener(v->
                 startActivity(new Intent(this, InviteParticipant.class)
                         .putExtra(C.reference,getIntent().getStringExtra(C.reference)))

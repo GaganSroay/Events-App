@@ -10,15 +10,16 @@ import android.widget.DatePicker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.events.Components.C;
-import com.example.events.Components.FirebaseVolleyRequest;
 import com.example.events.Components.LoadingBox;
-import com.example.events.HomeActivity;
+import com.example.events.Components.Server;
+import com.example.events.SplashScreen;
 import com.example.events.databinding.ActivitySignupDetailsBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
-import java.util.Map;
 
 public class SignupDetails extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -45,7 +46,7 @@ public class SignupDetails extends AppCompatActivity implements DatePickerDialog
             String birth = binding.dateofbirth.getText().toString();
             String phone = getIntent().getStringExtra("phone");
 
-            Map<String, String> userDetails = new HashMap<>();
+            HashMap<String, String> userDetails = new HashMap<>();
             userDetails.put(C.name, name);
             userDetails.put(C.email, email);
             userDetails.put(C.birth, birth);
@@ -53,13 +54,28 @@ public class SignupDetails extends AppCompatActivity implements DatePickerDialog
 
             if(auth.getCurrentUser() != null) {
                 loadingBar.show();
+                new Server(this).createUser(userDetails, new Server.Result() {
+                    @Override
+                    public void onResult(JSONObject result) {
+                        loadingBar.dismiss();
+                        startActivity(new Intent(SignupDetails.this, SplashScreen.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        loadingBar.dismiss();
+                        System.err.println(error);
+                    }
+                });
+                /*
 
                 new FirebaseVolleyRequest(SignupDetails.this, FirebaseVolleyRequest.Routes.NEW_USER)
                         .makeRequest(userDetails, new FirebaseVolleyRequest.GetResult() {
                             @Override
                             public void onResult(String result) {
                                 loadingBar.dismiss();
-                                startActivity(new Intent(SignupDetails.this, HomeActivity.class));
+                                startActivity(new Intent(SignupDetails.this, SplashScreen.class));
                                 finish();
                             }
 

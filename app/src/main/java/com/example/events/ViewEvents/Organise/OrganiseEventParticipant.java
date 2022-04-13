@@ -18,14 +18,11 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-
 public class OrganiseEventParticipant extends Fragment {
 
     DocumentReference ref;
     FirebaseFirestore db;
     FragmentOrganiseEventParticipantBinding binding;
-    ArrayList<Participants> participants;
     ParticipantList pList;
 
 
@@ -54,7 +51,6 @@ public class OrganiseEventParticipant extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentOrganiseEventParticipantBinding.inflate(inflater);
         listview = binding.listview;
-        participants = new ArrayList<>();
         pList = new ParticipantList();
         adapter = new ParticipantsAdapter(pList);
         listview.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -63,7 +59,6 @@ public class OrganiseEventParticipant extends Fragment {
         ref.collection("participants").addSnapshotListener((value, error) -> {
             for (DocumentChange doc : value.getDocumentChanges()) {
                 Participants part = new Participants(doc.getDocument());
-                participants.add(part);
                 pList.add(part);
             }
             synchronized (adapter) {

@@ -6,7 +6,7 @@ public class Participants {
     String name;
     String role;
     String UID;
-
+    boolean verified = false;
     boolean isTitle = false;
 
     public Participants(String Name, String role) {
@@ -20,6 +20,13 @@ public class Participants {
 
     public Participants(DocumentSnapshot doc) {
         this.name = doc.getString("user");
+        this.UID = doc.getString("user");
         this.role = doc.getString("role");
+
+        if (doc.contains("participated")) {
+            //System.out.println("CONTAINS PARTICI{ATES  "+doc.getBoolean("participated"));
+            verified = doc.getBoolean("participated");
+        }
+
     }
 }

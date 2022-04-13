@@ -8,16 +8,13 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
 import com.example.events.R;
 import com.example.events.ui.HomeActivity.fragments.InvitationsFragment;
 import com.example.events.ui.HomeActivity.fragments.MyEventsFragment;
 import com.example.events.ui.HomeActivity.fragments.OrganisedEvents;
 import com.example.events.ui.HomeActivity.fragments.ProfileFragment;
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes

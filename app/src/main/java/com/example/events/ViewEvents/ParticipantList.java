@@ -18,9 +18,26 @@ public class ParticipantList {
     }
 
     public void add(Participants p) {
-        participants.add(p);
-        if (p.role.equals("a")) admins.add(p);
-        else notAdmins.add(p);
+        boolean contains = checkAlreadyExists(participants, p);
+        if (contains) {
+            if (p.role.equals("a")) checkAlreadyExists(admins, p);
+            else checkAlreadyExists(notAdmins, p);
+            //System.out.println("Contains True");
+        } else {
+            //System.out.println("Contains False");
+            participants.add(p);
+            if (p.role.equals("a")) admins.add(p);
+            else notAdmins.add(p);
+        }
+    }
+
+    private boolean checkAlreadyExists(ArrayList<Participants> list, Participants part) {
+        for (int i = 0; i < participants.size(); i++)
+            if (part.UID.equals(participants.get(i).UID)) {
+                list.set(i, part);
+                return true;
+            }
+        return false;
     }
 
     public Participants get(int index) {
