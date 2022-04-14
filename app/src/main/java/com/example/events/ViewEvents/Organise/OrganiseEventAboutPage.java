@@ -5,15 +5,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.events.Components.C;
 import com.example.events.Components.Server;
+import com.example.events.databinding.BodyImageElementBinding;
+import com.example.events.databinding.BodyLinkElementBinding;
 import com.example.events.databinding.FragmentOrganiseEventAboutPageBinding;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +28,7 @@ public class OrganiseEventAboutPage extends Fragment {
     DocumentReference ref;
     FirebaseFirestore db;
     String eventId;
+    JSONObject body = null;
 
     public static OrganiseEventAboutPage newInstance(String ref, String eventId) {
         OrganiseEventAboutPage fragment = new OrganiseEventAboutPage();
@@ -52,10 +58,6 @@ public class OrganiseEventAboutPage extends Fragment {
             intent.putExtra("event_id", eventId);
             startActivity(intent);
         });
-
-        updateUI();
-
-
         return binding.getRoot();
     }
 
@@ -66,14 +68,22 @@ public class OrganiseEventAboutPage extends Fragment {
     }
 
     private void updateUI() {
+
         new Server(getActivity())
-                .getEvent(ref.getPath(), new Server.Result() {
+                .getEventBody(eventId, new Server.Result() {
                     @Override
-                    public void onResult(JSONObject result) {
-                        try {
-                            binding.description.setText(result.getString("event_description"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void onResult(JSONObject result) throws JSONException {
+                        binding.body.removeAllViews();
+                        String description = result.getString("description");
+                        binding.description.setText(description);
+                        if (result.has("body")) {
+                            JSONArray bodyArray = result.getJSONArray("body");
+                            if (bodyArray.length() > 0) {
+                                for (int i = 0; i < bodyArray.length(); i++) {
+                                    JSONObject bodyElement = bodyArray.getJSONObject(i);
+                                    addBodyElement(binding.body, bodyElement);
+                                }
+                            }
                         }
                     }
 
@@ -82,6 +92,29 @@ public class OrganiseEventAboutPage extends Fragment {
                         System.out.println(error);
                     }
                 });
+
+    }
+
+    public void addBodyElement(LinearLayout container, JSONObject bodyElement) throws JSONException {
+        String type = bodyElement.getString("type");
+        String name = bodyElement.getString("name");
+        String data = bodyElement.getString("data");
+        if (type.equals("link")) {
+            BodyLinkElementBinding linkBinding = BodyLinkElementBinding.inflate(getLayoutInflater());
+            linkBinding.linkTitle.setText(name);
+            linkBinding.linkLink.setText(data);
+            container.addView(linkBinding.getRoot());
+        } else if (type.equals("image")) {
+            BodyImageElementBinding linkBinding = BodyImageElementBinding.inflate(getLayoutInflater());
+            linkBinding.imageTitle.setText(name);
+            Glide.with(getActivity())
+                    .load(data)
+                    .into(linkBinding.imageImage);
+            container.addView(linkBinding.getRoot());
+
+            //.diskCacheStrategy(DiskCacheStrategy.NONE)
+            //.skipMemoryCache(true)
+        }
     }
 }
 

@@ -49,7 +49,6 @@ public class ViewJoinedEvent extends AppCompatActivity {
         binding.tabs.setupWithViewPager(binding.viewPager);
 
         updateUI();
-
     }
 
     @Override

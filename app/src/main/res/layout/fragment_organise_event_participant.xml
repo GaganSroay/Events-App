@@ -17,6 +17,7 @@
             android:paddingTop="10dp" />
 
         <ImageButton
+            android:id="@+id/add_participant_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
@@ -31,15 +32,15 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="80dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/circular_shape_solid"
             android:text="Applications"
-            android:textColor="@color/cyan_1"
-            app:backgroundTint="@color/cyan_3" />
+            android:textColor="@color/white"
+            app:backgroundTint="@color/cyan_1" />
     </RelativeLayout>
 
 

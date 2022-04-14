@@ -144,7 +144,7 @@ public class ViewOrganisedEvent extends AppCompatActivity {
                 case 1:
                     return OrganiseEventMessage.newInstance(ref);
                 default:
-                    return OrganiseEventParticipant.newInstance(ref);
+                    return OrganiseEventParticipant.newInstance(ref, eventId);
             }
         }
 

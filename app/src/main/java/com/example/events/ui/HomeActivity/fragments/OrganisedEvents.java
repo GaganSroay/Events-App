@@ -67,17 +67,24 @@ public class OrganisedEvents extends Fragment {
     }
 
     private void showList() {
-
         FirebaseVolleyRequest request = new FirebaseVolleyRequest(getActivity(), "events/organised");
         request.makeGetRequest(new FirebaseVolleyRequest.GetResult() {
             @Override
             public void onResult(String result) {
+                binding.progressBar.setVisibility(View.GONE);
                 try {
                     evenstList = new JSONArray(result);
-                    adapter = new OrganisedEventListAdapter(evenstList);
-                    binding.listview.setAdapter(adapter);
+                    if (evenstList.length() == 0) {
+                        binding.noEventTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.listview.setVisibility(View.VISIBLE);
+                        adapter = new OrganisedEventListAdapter(evenstList);
+                        binding.listview.setAdapter(adapter);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    binding.noEventTextView.setVisibility(View.VISIBLE);
+                    binding.noEventTextView.setText("Error retrieving events");
                 }
             }
 

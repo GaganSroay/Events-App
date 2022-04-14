@@ -9,10 +9,13 @@ import java.util.HashMap;
 
 public class Server {
     private static final String GET_EVENT = "events/get_event";
+    private static final String GET_EVENTBODY = "events/get_body/";
+    private static final String ADD_BODY_ELEMENT = "events/add_body_element";
 
     private static final String EDIT_EVENT = "events_service/edit_event";
     private static final String START_EVENT = "events_service/start_event/";
     private static final String VERIFY_TICKET = "events_service/verify_ticket";
+    private static final String INVITE_PARTICIPANTS = "events_service/invite";
 
     private static final String VERIFY_ID_TOKEN = "user/verify_id_token";
     private static final String CHECK_USER = "user/check/";
@@ -24,7 +27,7 @@ public class Server {
         this.context = context;
     }
 
-    static FirebaseVolleyRequest.GetResult getResults(Result onResult) {
+    public static FirebaseVolleyRequest.GetResult getResults(Result onResult) {
         return new FirebaseVolleyRequest.GetResult() {
             @Override
             public void onResult(String result) {
@@ -42,10 +45,18 @@ public class Server {
         };
     }
 
-    public void getEvent(String path, Result onResult) {
+    public static HashMap<String, String> wrapInHashMap(String key, String value) {
         HashMap<String, String> data = new HashMap<>();
-        data.put("path", path);
-        postRequest(GET_EVENT, data, onResult);
+        data.put(key, value);
+        return data;
+    }
+
+    public void inviteParticipant(HashMap<String, String> data, Result onResult) {
+        postRequest(INVITE_PARTICIPANTS, data, onResult);
+    }
+
+    public void addBodyElement(HashMap<String, String> data, Result onResult) {
+        postRequest(ADD_BODY_ELEMENT, data, onResult);
     }
 
     public void verifyTicket(HashMap<String, String> data, Result onResult) {
@@ -80,8 +91,16 @@ public class Server {
         new FirebaseVolleyRequest(context, route).makeGetRequest(getResults(onResult));
     }
 
+    public void getEventBody(String eventId, Result onResult) {
+        getRequest(GET_EVENTBODY + eventId, onResult);
+    }
+
+    public void getEvent(String path, Result onResult) {
+        postRequest(GET_EVENT, wrapInHashMap("path", path), onResult);
+    }
+
     public interface Result {
-        void onResult(JSONObject result);
+        void onResult(JSONObject result) throws JSONException;
 
         void onError(String error);
     }

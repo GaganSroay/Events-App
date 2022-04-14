@@ -32,8 +32,6 @@ import java.util.HashMap;
 public class MyEventsFragment extends Fragment {
 
     private FragmentMyEventsBinding binding;
-
-
     JoinedEventsListAdapter adapter;
     JSONArray evenstList;
 
@@ -43,8 +41,6 @@ public class MyEventsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentMyEventsBinding.inflate(inflater);
-
-
         evenstList = new JSONArray();
         binding.listview.setLayoutManager(new LinearLayoutManager(getActivity()));
         getList();
@@ -119,12 +115,20 @@ public class MyEventsFragment extends Fragment {
         request.makeGetRequest(new FirebaseVolleyRequest.GetResult() {
             @Override
             public void onResult(String result) {
+                binding.progressBar.setVisibility(View.GONE);
                 try {
                     evenstList = new JSONArray(result);
-                    adapter = new JoinedEventsListAdapter(evenstList);
-                    binding.listview.setAdapter(adapter);
+                    if (evenstList.length() == 0) {
+                        binding.noEventTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.listview.setVisibility(View.VISIBLE);
+                        adapter = new JoinedEventsListAdapter(evenstList);
+                        binding.listview.setAdapter(adapter);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    binding.noEventTextView.setVisibility(View.VISIBLE);
+                    binding.noEventTextView.setText("Error retrieving events");
                 }
             }
 
@@ -169,8 +173,7 @@ public class MyEventsFragment extends Fragment {
                 holder.eventDate.setText(eventDate);
                 holder.eventTime.setText(eventTime + ", ");
 
-                holder.itemView.setOnClickListener(v ->
-                {
+                holder.itemView.setOnClickListener(v -> {
                     try {
                         Intent intent = new Intent(getActivity(), ViewJoinedEvent.class);
                         intent.putExtra(C.reference, data.getString("refString"));

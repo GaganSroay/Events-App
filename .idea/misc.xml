@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/drawable/add.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/drawable/body_image_element.xml" value="0.183" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/drawable/box.xml" value="0.2755208333333333" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/drawable/chat_bubble_left.xml" value="0.2755208333333333" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/drawable/chat_bubble_left_empty.xml" value="0.207" />
@@ -42,9 +43,13 @@
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/activity_view_more_organised.xml" value="0.259375" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/activity_view_organised_event.xml" value="0.2" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/activity_view_ticket.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/body_image_element.xml" value="0.259375" />
+        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/body_link_element.xml" value="0.259375" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/chat_bubble_left.xml" value="0.264" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/chat_bubble_right.xml" value="0.259375" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/createform_add_element.xml" value="0.264" />
+        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/edit_event_add_view.xml" value="0.259375" />
+        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/edit_event_link_view.xml" value="0.2" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/empty_text_view.xml" value="0.1515625" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_home.xml" value="0.2453125" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_invitations.xml" value="0.264" />
@@ -55,7 +60,7 @@
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_organise_event_about_page.xml" value="0.2" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_organise_event_message.xml" value="0.2" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_organise_event_more.xml" value="0.11875" />
-        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_organise_event_participant.xml" value="0.11875" />
+        <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_organise_event_participant.xml" value="0.264" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_organised_events.xml" value="0.264" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Users/gagan/AndroidStudioProjects/Events/app/src/main/res/layout/joined_event_participant_list_element.xml" value="0.259375" />

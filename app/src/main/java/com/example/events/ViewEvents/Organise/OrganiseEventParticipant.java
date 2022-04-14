@@ -1,5 +1,6 @@
 package com.example.events.ViewEvents.Organise;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.events.Components.C;
+import com.example.events.InviteParticipant;
 import com.example.events.ViewEvents.ParticipantList;
 import com.example.events.ViewEvents.Participants;
 import com.example.events.ViewEvents.ParticipantsAdapter;
@@ -28,12 +30,14 @@ public class OrganiseEventParticipant extends Fragment {
 
     RecyclerView listview;
     ParticipantsAdapter adapter;
+    String eventId;
 
 
-    public static OrganiseEventParticipant newInstance(String ref) {
+    public static OrganiseEventParticipant newInstance(String ref, String eventId) {
         OrganiseEventParticipant fragment = new OrganiseEventParticipant();
         Bundle args = new Bundle();
         args.putString(C.reference, ref);
+        args.putString("event_id", eventId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,8 +46,10 @@ public class OrganiseEventParticipant extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
-        if (getArguments() != null)
+        if (getArguments() != null) {
             ref = db.document(getArguments().getString(C.reference));
+            eventId = getArguments().getString("event_id");
+        }
     }
 
     @Override
@@ -65,6 +71,15 @@ public class OrganiseEventParticipant extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        binding.addParticipantButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), InviteParticipant.class);
+            intent.putExtra(C.reference, ref.getPath());
+            intent.putExtra("event_id", eventId);
+            startActivity(intent);
+        });
+
+
         return binding.getRoot();
     }
 
